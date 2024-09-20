@@ -1,5 +1,3 @@
----
-
 **About Me**
 
 As a Cybersecurity Specialist in the U.S. Army since 2022, I've gained valuable hands-on experience in safeguarding and analysis of critical systems. I'm currently pursuing a Cybersecurity Technology Bachelor's degree from the University of Maryland Global Campus, expected to graduate in December 2024, enhancing my technical skills and knowledge to further contribute to the field of cybersecurity.
