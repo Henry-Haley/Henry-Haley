@@ -22,12 +22,15 @@ Passionate about penetration testing and ethical hacking, I've honed my skills i
 **Tools**
 
 ***Penetration Testing***
+
 <img src="https://img.shields.io/badge/-Kali%20Linux-557C94?&style=for-the-badge&logo=Kali%20Linux&logoColor=white" />       <img src="https://img.shields.io/badge/-Metasploit-2F4D7D?&style=for-the-badge&logo=Metasploit&logoColor=white" />      <img src="https://img.shields.io/badge/-Burp%20Suite-FF6F20?&style=for-the-badge&logo=Burp%20Suite&logoColor=white" />      <img src="https://img.shields.io/badge/-BloodHound-CB3E4B?&style=for-the-badge&logo=BloodHound&logoColor=white" />
 
 **Network Scanning**
+
 <img src="https://img.shields.io/badge/-Nessus-00C18C?&style=for-the-badge&logo=Nessus&logoColor=white" />      <img src="https://img.shields.io/badge/-OpenVAS-558F1B?&style=for-the-badge&logo=OpenVAS&logoColor=white" />      <img src="https://img.shields.io/badge/-Nmap-4682B4?&style=for-the-badge&logo=Nmap&logoColor=white" />
 
 **Network Security**
+
 <img src="https://img.shields.io/badge/-Splunk-000000?&style=for-the-badge&logo=Splunk&logoColor=white" />      <img src="https://img.shields.io/badge/-Wireshark-1679A7?&style=for-the-badge&logo=Wireshark&logoColor=white" />      
 
 ---
