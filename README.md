@@ -1,7 +1,3 @@
-My LinkedIn!
-
-<a href="https://www.linkedin.com/in/henry-haley-a4ba20177/"><img src="https://img.shields.io/badge/-LinkedIn-0072b1?&style=for-the-badge&logo=linkedin&logoColor=white" /></a>
-
 ---
 
 **About Me**
