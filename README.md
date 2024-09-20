@@ -41,5 +41,8 @@ Passionate about penetration testing and ethical hacking, I've honed my skills i
 
 ---
 
-***Projects***
+**Projects**
+
+***CTF Write-Ups***
+- [Blue](https://github.com/Henry-Haley/Henry-Haley/blob/main/Blue.md)
 
