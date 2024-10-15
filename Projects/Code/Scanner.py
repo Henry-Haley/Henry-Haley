@@ -9,15 +9,17 @@ def scanner(ip, start_port, end_port):
         start_port (int): First port to scan
         end_port (int): Last port to scan
     '''
+    count = 0
     for port in range(start_port, end_port + 1):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #creates IPv4 Socket
-        s.settimeout(3)
+        s.settimeout(1)
         result = s.connect_ex((ip, port))
         if result == 0:
             print(f"Port {port} is open")
         else:
-            print(f"Port {port} is closed")
+            count += 1
         s.close()
+    print("There are ", count -1 ," closed ports")
 
 # Menu function. Allows multiple inputs, like Enter for common ports. Planning as functionality grows to add a "man" page here
 
