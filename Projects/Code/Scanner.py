@@ -4,7 +4,7 @@ def portscan(ip, portlist):
     count = 0
     for port in list(portlist):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #creates IPv4 Socket
-        s.settimeout(1)
+        s.settimeout(0.5)
         result = s.connect_ex((ip, port))
         if result == 0:
             try:
@@ -12,9 +12,10 @@ def portscan(ip, portlist):
             except OSError:
                 service = "Unkown Service"
             print(f"Port ", port ," is open: Service: " ,service ,"")
+            s.close()
+            return (port, service)
         else:
             count += 1
-        s.close()
     print("There are ", count -1 ," clorangescants")
 
 
@@ -53,7 +54,7 @@ def display_menu(ip):
         ip (str): The IP Address to scan
     '''
     port = input("Type your starting port, hit enter for registered ports, or press P for common ports\n").strip()
-    tcp1000 = [1,3,4,6,7,9,13,17,19,20,21,22,23,24,25,26,30,32,33,37,42,43,49,53,70,79,80,81,82,83,84,85,88,89,90,99,
+    tcp1000 = {1,3,4,6,7,9,13,17,19,20,21,22,23,24,25,26,30,32,33,37,42,43,49,53,70,79,80,81,82,83,84,85,88,89,90,99,
     100,106,109,110,111,113,119,125,135,139,143,144,146,161,163,179,199,211,212,222,254,255,256,259,264,280,301,306,311,
     340,366,389,406,407,416,417,425,427,443,444,445,458,464,465,481,497,500,512,513,514,515,524,541,543,544,545,548,554,555,
     563,587,593,616,617,625,631,636,646,648,666,667,668,683,687,691,700,705,711,714,720,722,726,749,765,777,783,787,800,801,
@@ -94,7 +95,7 @@ def display_menu(ip):
     32782,32783,32784,32785,33354,33899,34571,34572,34573,35500,38292,40193,40911,41511,42510,44176,44442,44443,44501,45100,
     48080,49152,49153,49154,49155,49156,49157,49158,49159,49160,49161,49163,49165,49167,49175,49176,49400,49999,50000,50001,
     50002,50003,50006,50300,50389,50500,50636,50800,51103,51493,52673,52822,52848,52869,54045,54328,55055,55056,55555,55600,
-    56737,56738,57294,57797,58080,60020,60443,61532,61900,62078,63331,64623,64680,65000,65129,65389]
+    56737,56738,57294,57797,58080,60020,60443,61532,61900,62078,63331,64623,64680,65000,65129,65389}
     if port == "":
         start_port = 0
         end_port = 1024
@@ -104,12 +105,10 @@ def display_menu(ip):
         try:
             start_port = int(port)
             end_port = int(input("Enter your end port\n"))
+            rangescan(ip, start_port, end_port)
         except ValueError:
             print("Invalid input. Please enter numeric port values.")
             return # Exits function if port number is invalid
-
-    # Calls the rangescan function
-    rangescan(ip, start_port, end_port)
 
 def main():
     '''
