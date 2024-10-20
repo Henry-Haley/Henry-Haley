@@ -1,63 +1,6 @@
 import socket
 
-def portscan(ip, portlist):
-    count = 0
-    for port in list(portlist):
-        try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #creates IPv4 Socket
-                s.settimeout(0.5)
-                result = s.connect_ex((ip, port))
-                if result == 0:
-                    try:
-                        service = socket.getservbyport(port)
-                    except OSError:
-                        service = "Unkown Service"
-                    print(f"Port {port} is open: Service: {service}")
-                else:
-                    count += 1
-        except socket.error as e:
-            print(f"There was an error scanning port {port}: {e}")
-    print(f"There are {count} closed ports")
-
-
-def rangescan(ip, start_port, end_port):
-    '''
-    Scans a range of user-supplied ports on a Specified IP Address
-
-    Parameters:
-        ip(str) : The IP address to scan
-        start_port (int): First port to scan
-        end_port (int): Last port to scan
-    '''
-    count = 0
-    for port in range(start_port, end_port + 1):
-        try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:#creates IPv4 Socket
-                s.settimeout(0.5)
-                result = s.connect_ex((ip, port))
-                if result == 0:
-                    try:
-                        service = socket.getservbyport(port)
-                    except OSError:
-                        service = "Unkown Service"
-                    print(f"Port {port} is open: Service: {service}")
-                else:
-                    count += 1
-        except socket.error as e:
-            print(f"Socket error while scanning port {port}: {e}")
-    print(f"There are {count} closed ports")
-
-# Menu function. Allows multiple inputs, like Enter for common ports. Planning as functionality grows to add a "man" page here
-
-def display_menu(ip):
-    '''
-    Menu Function.
-
-    Parameters:
-        ip (str): The IP Address to scan
-    '''
-    port = input("Type your starting port, hit enter for registered ports, or press P for common ports\n").strip()
-    tcp1000 = {1,3,4,6,7,9,13,17,19,20,21,22,23,24,25,26,30,32,33,37,42,43,49,53,70,79,80,81,82,83,84,85,88,89,90,99,
+tcp1000 = {1,3,4,6,7,9,13,17,19,20,21,22,23,24,25,26,30,32,33,37,42,43,49,53,70,79,80,81,82,83,84,85,88,89,90,99,
     100,106,109,110,111,113,119,125,135,139,143,144,146,161,163,179,199,211,212,222,254,255,256,259,264,280,301,306,311,
     340,366,389,406,407,416,417,425,427,443,444,445,458,464,465,481,497,500,512,513,514,515,524,541,543,544,545,548,554,555,
     563,587,593,616,617,625,631,636,646,648,666,667,668,683,687,691,700,705,711,714,720,722,726,749,765,777,783,787,800,801,
@@ -99,6 +42,59 @@ def display_menu(ip):
     48080,49152,49153,49154,49155,49156,49157,49158,49159,49160,49161,49163,49165,49167,49175,49176,49400,49999,50000,50001,
     50002,50003,50006,50300,50389,50500,50636,50800,51103,51493,52673,52822,52848,52869,54045,54328,55055,55056,55555,55600,
     56737,56738,57294,57797,58080,60020,60443,61532,61900,62078,63331,64623,64680,65000,65129,65389}
+
+def scan(ip,port):
+    count = 0
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #creates IPv4 Socket
+            s.settimeout(0.5)
+            result = s.connect_ex((ip, port))
+            if result == 0:
+                try:
+                    service = socket.getservbyport(port)
+                except OSError:
+                    service = "Unkown Service"
+                print(f"Port {port} is open: Service: {service}")
+                return False # Port is Open
+            else:
+                return True # Port is closed
+    except socket.error as e:
+        print(f"There was an error scanning port {port}: {e}")
+
+def portscan(ip, portlist):
+    closed_count = 0
+    for port in portlist:
+        if scan(ip,port):
+            closed_count += 1
+    print(f"There are {closed_count} closed ports in the provided list.")
+
+
+def rangescan(ip, start_port, end_port):
+    '''
+    Scans a range of user-supplied ports on a Specified IP Address
+
+    Parameters:
+        ip(str) : The IP address to scan
+        start_port (int): First port to scan
+        end_port (int): Last port to scan
+    '''
+    closed_count = 0
+    for port in range(start_port, end_port + 1):
+        if scan(ip,port):
+            closed_count += 1
+    print(f"There are {closed_count - 1} closed ports.")
+
+# Menu function. Allows multiple inputs, like Enter for common ports. Planning as functionality grows to add a "man" page here
+
+def display_menu(ip):
+    '''
+    Menu Function.
+
+    Parameters:
+        ip (str): The IP Address to scan
+    '''
+    port = input("Type your starting port, hit enter for registered ports, or press P for common ports\n").strip()
+    
     if port == "":
         start_port = 0
         end_port = 1024
