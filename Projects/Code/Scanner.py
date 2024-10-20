@@ -3,20 +3,21 @@ import socket
 def portscan(ip, portlist):
     count = 0
     for port in list(portlist):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #creates IPv4 Socket
-        s.settimeout(0.5)
-        result = s.connect_ex((ip, port))
-        if result == 0:
-            try:
-                service = socket.getservbyport(port)
-            except OSError:
-                service = "Unkown Service"
-            print(f"Port ", port ," is open: Service: " ,service ,"")
-            s.close()
-            return (port, service)
-        else:
-            count += 1
-    print("There are ", count -1 ," clorangescants")
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #creates IPv4 Socket
+                s.settimeout(0.5)
+                result = s.connect_ex((ip, port))
+                if result == 0:
+                    try:
+                        service = socket.getservbyport(port)
+                    except OSError:
+                        service = "Unkown Service"
+                    print(f"Port {port} is open: Service: {service}")
+                else:
+                    count += 1
+        except socket.error as e:
+            print(f"There was an error scanning port {port}: {e}")
+    print(f"There are {count} closed ports")
 
 
 def rangescan(ip, start_port, end_port):
@@ -30,19 +31,21 @@ def rangescan(ip, start_port, end_port):
     '''
     count = 0
     for port in range(start_port, end_port + 1):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #creates IPv4 Socket
-        s.settimeout(1)
-        result = s.connect_ex((ip, port))
-        if result == 0:
-            try:
-                service = socket.getservbyport(port)
-            except OSError:
-                service = "Unkown Service"
-            print(f"Port ", port ," is open: Service: " ,service ,"")
-        else:
-            count += 1
-        s.close()
-    print("There are ", count -1 ," closed ports")
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:#creates IPv4 Socket
+                s.settimeout(0.5)
+                result = s.connect_ex((ip, port))
+                if result == 0:
+                    try:
+                        service = socket.getservbyport(port)
+                    except OSError:
+                        service = "Unkown Service"
+                    print(f"Port {port} is open: Service: {service}")
+                else:
+                    count += 1
+        except socket.error as e:
+            print(f"Socket error while scanning port {port}: {e}")
+    print(f"There are {count} closed ports")
 
 # Menu function. Allows multiple inputs, like Enter for common ports. Planning as functionality grows to add a "man" page here
 
@@ -99,6 +102,7 @@ def display_menu(ip):
     if port == "":
         start_port = 0
         end_port = 1024
+        rangescan(ip, start_port, end_port)
     elif port == "p":
         portscan(ip, tcp1000)
     else:
