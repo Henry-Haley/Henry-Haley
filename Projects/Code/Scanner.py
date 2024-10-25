@@ -116,21 +116,30 @@ def display_menu(ip):
             print("Invalid input. Please enter numeric port values.")
             return # Exits function if port number is invalid
 
+def validate_ip(ip):
+    try:
+        return ipaddress.ip_address(ip)
+    except ValueError:
+        print("Invalid IP. Please enter a valid IP.")
+        return None
+
 def main():
     '''
     Main function
     '''
-    ip = input("What IP Address do you wish to scan?\n").strip()
-    try:
-        ip_obj = ipaddress.ip_address(ip)
-        # Breaks out of loop when a valid IP is entered
-    except ValueError:
-        print("Invalid IP. Please enter a Valid IP")  # Keep asking for a valid IP
+    while True:
+        ip = input("What IP Address do you wish to scan?\n").strip()
+        ip_obj = validate_ip(ip)
+        if ip_obj:
+            ip = str(ip_obj)
+            break
+
     while True:
         display_menu(ip)
         again = input("Press 'Y' to scan again, or anything else to exit\n") #allows breaking of Loop
         if again != "y":
             print("GTFO!")
+            return
             
 
 if __name__ == "__main__":
