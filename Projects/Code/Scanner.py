@@ -45,6 +45,9 @@ tcp1000 = [1,3,4,6,7,9,13,17,19,20,21,22,23,24,25,26,30,32,33,37,42,43,49,53,70,
     56737,56738,57294,57797,58080,60020,60443,61532,61900,62078,63331,64623,64680,65000,65129,65389]
 
 def scan(ip,port):
+    '''
+    Scanning function. Repeatable, used multiple times
+    '''
     count = 0
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #creates IPv4 Socket
@@ -63,6 +66,9 @@ def scan(ip,port):
         print(f"There was an error scanning port {port}: {e}")
 
 def portscan(ip, portlist):
+    '''
+    Portlist scanner. Given a list, iterates through the list
+    '''
     closed_count = 0
     for port in portlist:
         if scan(ip,port):
@@ -114,20 +120,18 @@ def main():
     '''
     Main function
     '''
-    ip = input("What IP Address do you wish to scan?\n")
-    while True:
-        ip = input("What IP Address do you wish to scan?\n").strip()
-        try:
-            ip_obj = ipaddress.ip_address(ip)
-            break  # Breaks out of loop when a valid IP is entered
-        except ValueError:
-            print("Invalid IP. Please enter a Valid IP")  # Keep asking for a valid IP
+    ip = input("What IP Address do you wish to scan?\n").strip()
+    try:
+        ip_obj = ipaddress.ip_address(ip)
+        # Breaks out of loop when a valid IP is entered
+    except ValueError:
+        print("Invalid IP. Please enter a Valid IP")  # Keep asking for a valid IP
     while True:
         display_menu(ip)
         again = input("Press 'Y' to scan again, or anything else to exit\n") #allows breaking of Loop
         if again != "y":
             print("GTFO!")
-            break
+            
 
 if __name__ == "__main__":
     main()
