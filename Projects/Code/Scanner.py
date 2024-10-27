@@ -75,7 +75,6 @@ def portscan(ip, portlist):
             closed_count += 1
     print(f"There are {closed_count} closed ports in the provided list.")
 
-
 def rangescan(ip, start_port, end_port):
     '''
     Scans a range of user-supplied ports on a Specified IP Address
@@ -117,6 +116,9 @@ def display_menu(ip):
             return # Exits function if port number is invalid
 
 def validate_ip(ip):
+    '''
+    Function to simply validate IP addresses as they are passed.
+    '''
     try:
         return ipaddress.ip_address(ip)
     except ValueError:
@@ -125,7 +127,10 @@ def validate_ip(ip):
 
 def main():
     '''
-    Main function
+    Main function.
+
+    Presents a menu option and allows input of an IP to scan and a menu 
+    to control flow of the program.
     '''
     while True:
         ip = input("What IP Address do you wish to scan?\n").strip()
