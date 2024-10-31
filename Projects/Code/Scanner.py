@@ -1,6 +1,10 @@
 import socket
 import ipaddress
 
+'''
+As I get more familiar with Flask, I plan to create a modular web server that holds all my tools. Whenevr that happens, I will be keeping the tcp1000 as 
+well as a bunch of other portlists in a file to call if needed.
+'''
 tcp1000 = [1,3,4,6,7,9,13,17,19,20,21,22,23,24,25,26,30,32,33,37,42,43,49,53,70,79,80,81,82,83,84,85,88,89,90,99,
     100,106,109,110,111,113,119,125,135,139,143,144,146,161,163,179,199,211,212,222,254,255,256,259,264,280,301,306,311,
     340,366,389,406,407,416,417,425,427,443,444,445,458,464,465,481,497,500,512,513,514,515,524,541,543,544,545,548,554,555,
@@ -46,7 +50,14 @@ tcp1000 = [1,3,4,6,7,9,13,17,19,20,21,22,23,24,25,26,30,32,33,37,42,43,49,53,70,
 
 def scan(ip,port):
     '''
-    Scanning function. Repeatable, used multiple times
+    Attempts to connect to a given IP and port, printing open ports and their details. 
+
+    Args:
+        ip(str): The IP Address to check
+        port(int): The port number to check
+
+    Returns:
+        bool: True is closed, false if open
     '''
     count = 0
     try:
@@ -67,7 +78,11 @@ def scan(ip,port):
 
 def portscan(ip, portlist):
     '''
-    Portlist scanner. Given a list, iterates through the list
+    Portlist scanner. Given a list, iterates through the list.
+
+    Args:
+        ip(str): The IP address to scan
+        ports (list[int]): A list of ports to scan
     '''
     closed_count = 0
     for port in portlist:
@@ -75,7 +90,7 @@ def portscan(ip, portlist):
             closed_count += 1
     print(f"There are {closed_count} closed ports in the provided list.")
 
-def rangescan(ip, start_port, end_port):
+def scan_port_range(ip, start_port, end_port):
     '''
     Scans a range of user-supplied ports on a Specified IP Address
 
@@ -99,21 +114,29 @@ def display_menu(ip):
     Parameters:
         ip (str): The IP Address to scan
     '''
-    port = input("Type your starting port, hit enter for registered ports, or press P for common ports\n").strip()
-    if port == "":
+    print("Choose an Option:")
+    print("1. Scan registered ports (0-1024)")
+    print("2. Scan common ports (TCP 1000)")
+    print("3. Enter custom port range")
+
+    choice = input("Type your starting port, hit enter for registered ports, or press P for common ports\n").strip()
+    if choice == "1":
         start_port = 0
         end_port = 1024
-        rangescan(ip, start_port, end_port)
-    elif port == "p":
+        scan_port_range(ip, start_port, end_port)
+    elif choice == "2":
         portscan(ip, tcp1000)
-    else:
+    elif choice == "3":
         try:
-            start_port = int(port)
-            end_port = int(input("Enter your end port\n"))
-            rangescan(ip, start_port, end_port)
+            start_port = int(input("Enter your starting port: "))
+            end_port = int(input("Enter your end port: "))
+            scan_port_range(ip, start_port, end_port)
         except ValueError:
             print("Invalid input. Please enter numeric port values.")
             return # Exits function if port number is invalid
+    else:
+        print("Invalid choice. Please try again.")
+
 
 def validate_ip(ip):
     '''
