@@ -37,11 +37,11 @@ Passionate about penetration testing and ethical hacking, I've honed my skills i
 
 # Certifications
 
-<img src="https://img.shields.io/badge/-GIAC%20GDAT-003366?&style=for-the-badge&logo=GIAC&logoColor=white" /> <img src="https://img.shields.io/badge/-Sec%2B-FFB100?&style=for-the-badge&logo=CompTIA&logoColor=white" /> <img src="https://img.shields.io/badge/-PenTest%2B-007C92?&style=for-the-badge&logo=CompTIA&logoColor=white" />
+<img src="https://img.shields.io/badge/-GIAC%20GDAT-003366?&style=for-the-badge&logo=GIAC&logoColor=white" /> <img src="https://img.shields.io/badge/-Sec%2B-FFB100?&style=for-the-badge&logo=CompTIA&logoColor=white" /> <img src="https://img.shields.io/badge/-PenTest%2B-007C92?&style=for-the-badge&logo=CompTIA&logoColor=white" /> <img src="https://img.shields.io/badge/Associate%20of%20(ISC)%C2%B2-2A4B8D?style=for-the-badge&logo=ISC2&logoColor=white" />
 
 **In-Progress**
 
-<img src="https://img.shields.io/badge/-CISSP-2A4B8D?&style=for-the-badge&logo=ISC2&logoColor=white" /> <img src="https://img.shields.io/badge/-OSCP-FFB100?&style=for-the-badge&logo=Offensive%20Security&logoColor=black" /> <img src="https://img.shields.io/badge/-PNPT-007C92?&style=for-the-badge&logo=Network%20Defense&logoColor=white" />
+<img src="https://img.shields.io/badge/GIAC%20GPEN-005596?style=for-the-badge&logoColor=white" /> <img src="https://img.shields.io/badge/-OSCP-FFB100?&style=for-the-badge&logo=Offensive%20Security&logoColor=black" /> <img src="https://img.shields.io/badge/-PNPT-007C92?&style=for-the-badge&logo=Network%20Defense&logoColor=white" />
 
 ---
 
