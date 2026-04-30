@@ -53,5 +53,5 @@ Passionate about penetration testing and ethical hacking, I've honed my skills i
   *Exploited a Windows 7 machine to gain and maintain access, demonstrating skills in vulnerability exploitation and system access persistence.*
 
 ***Coding Projects***
-- **[Scanner.py](https://github.com/Henry-Haley/Henry-Haley/blob/main/Projects/Code/Scanner.py)**  
-  *Uses ping sweeps to scan a network of your choosing, showcasing proficiency in network scanning and automation.*
+- **[portweft](https://github.com/Henry-Haley/portweft)**  
+  *PortWeft is a lightweight service discovery tool that uses Nmap and optional Impacket recon to produce clean text or JSON reports.*
