@@ -1,56 +1,124 @@
-# About Me
+# Henry Haley
 
-As a Cybersecurity Specialist in the U.S. Army since 2022, I've gained valuable hands-on experience in safeguarding, detecting threats, and protecting critical systems. I'm pursuing a Masters's in Cyber Operations at the University of Maryland Global Campus, graduating in Fall 2027, while gaining hands-on experience with cybersecurity tools and technologies to strengthen my expertise.
+## About Me
 
----
+I am a Cybersecurity Specialist in the U.S. Army with hands-on experience in cyber defense, threat detection, vulnerability assessment, and offensive security.
 
-# Objective
+I earned a Bachelor of Science in Cybersecurity Technology from the University of Maryland Global Campus and am currently pursuing a Master of Science in Cyber Operations at UMGC, with an anticipated graduation date of Fall 2027.
 
-Passionate about penetration testing and ethical hacking, I've honed my skills in identifying and exploiting vulnerabilities, and I am seeking a challenging role where I can leverage my expertise.
-
----
-
-# Skills
-
-- **Vulnerability Assessment:** Proficient in tools such as Nessus, OpenVAS, and Nmap to identify vulnerabilities in networks and systems.
-- **Penetration Testing:** Experienced in penetration testing tools such as Metasploit, Kali Linux, Burp Suite, Nikto, and John the Ripper.
-- **Network Security:** Knowledge of network protocols, including TCP/IP and UDP, firewalls, intrusion detection systems (IDS), and intrusion prevention systems (IPS).
-- **Scripting:** Proficient in scripting languages like Python and Bash for automating tasks and editing open-source tools.
+My primary interests include penetration testing, adversary emulation, vulnerability research, digital forensics, incident response, and security-tool development.
 
 ---
 
-# Tools
+## Education
 
-***Penetration Testing***
+- **Bachelor of Science in Cybersecurity Technology**  
+  University of Maryland Global Campus — Graduated
 
-<img src="https://img.shields.io/badge/-Kali%20Linux-557C94?&style=for-the-badge&logo=Kali%20Linux&logoColor=white" /> <img src="https://img.shields.io/badge/-Metasploit-2F4D7D?&style=for-the-badge&logo=Metasploit&logoColor=white" /> <img src="https://img.shields.io/badge/-Burp%20Suite-FF6F20?&style=for-the-badge&logo=Burp%20Suite&logoColor=white" /> <img src="https://img.shields.io/badge/-BloodHound-CB3E4B?&style=for-the-badge&logo=BloodHound&logoColor=white" />
-
-**Network Scanning**
-
-<img src="https://img.shields.io/badge/-Nessus-00C18C?&style=for-the-badge&logo=Nessus&logoColor=white" /> <img src="https://img.shields.io/badge/-OpenVAS-558F1B?&style=for-the-badge&logo=OpenVAS&logoColor=white" /> <img src="https://img.shields.io/badge/-Nmap-4682B4?&style=for-the-badge&logo=Nmap&logoColor=white" />
-
-**Network Security**
-
-<img src="https://img.shields.io/badge/-Splunk-000000?&style=for-the-badge&logo=Splunk&logoColor=white" /> <img src="https://img.shields.io/badge/-Wireshark-1679A7?&style=for-the-badge&logo=Wireshark&logoColor=white" />
+- **Master of Science in Cyber Operations**  
+  University of Maryland Global Campus — Anticipated Fall 2027
 
 ---
 
-# Certifications
+## Professional Focus
 
-<img src="https://img.shields.io/badge/-GIAC%20GDAT-003366?&style=for-the-badge&logo=GIAC&logoColor=white" /> <img src="https://img.shields.io/badge/-CompTIA%20Sec%2B-FFB100?&style=for-the-badge&logo=CompTIA&logoColor=white" /> <img src="https://img.shields.io/badge/-CompTIA%20PenTest%2B-007C92?&style=for-the-badge&logo=CompTIA&logoColor=white" /> <img src="https://img.shields.io/badge/CompTIA%20CNVP-C00033?style=for-the-badge&logo=CompTIA&logoColor=white" /> <img src="https://img.shields.io/badge/Associate%20of%20(ISC)%C2%B2-2A4B8D?style=for-the-badge&logo=ISC2&logoColor=white" /> <img src="https://img.shields.io/badge/GIAC%20GPEN-005596?style=for-the-badge&logoColor=white" /> <img src="https://img.shields.io/badge/GIAC%20GRTP-7A1F1F?style=for-the-badge&logoColor=white" />
+I am interested in understanding and documenting the complete security-assessment lifecycle:
 
-**In-Progress**
-
- <img src="https://img.shields.io/badge/-OSCP-FFB100?&style=for-the-badge&logo=Offensive%20Security&logoColor=black" /> <img src="https://img.shields.io/badge/-PNPT-007C92?&style=for-the-badge&logo=Network%20Defense&logoColor=white" />
+- Identifying and validating vulnerabilities
+- Developing and executing attack paths
+- Evaluating business and technical impact
+- Collecting defensible evidence
+- Identifying detection opportunities
+- Recommending remediation
+- Verifying corrective actions
 
 ---
 
-# Projects
+## Skills
 
-***CTF Write-Ups***
-- **[Blue](https://github.com/Henry-Haley/Henry-Haley/blob/main/Projects/Write-Ups/Blue.md)**  
-  *Exploited a Windows 7 machine to gain and maintain access, demonstrating skills in vulnerability exploitation and system access persistence.*
+- **Penetration Testing:** Network, web application, infrastructure, and Active Directory security testing
+- **Vulnerability Assessment:** Identification, validation, prioritization, and documentation of security weaknesses
+- **Digital Forensics and Incident Response:** Host, network, memory, and log-based investigation
+- **Network Security:** TCP/IP, UDP, firewalls, IDS/IPS, packet analysis, and service enumeration
+- **Security Automation:** Python, Bash, and Go development for assessment and analysis workflows
+- **Technical Reporting:** Evidence collection, technical findings, remediation guidance, and security write-ups
 
-***Coding Projects***
-- **[portweft](https://github.com/Henry-Haley/portweft)**  
-  *PortWeft is a lightweight service discovery tool that uses Nmap and optional Impacket recon to produce clean text or JSON reports.*
+---
+
+## Tools
+
+### Penetration Testing
+
+<img src="https://img.shields.io/badge/-Kali%20Linux-557C94?&style=for-the-badge&logo=Kali%20Linux&logoColor=white" />
+<img src="https://img.shields.io/badge/-Metasploit-2F4D7D?&style=for-the-badge&logo=Metasploit&logoColor=white" />
+<img src="https://img.shields.io/badge/-Burp%20Suite-FF6F20?&style=for-the-badge&logo=Burp%20Suite&logoColor=white" />
+<img src="https://img.shields.io/badge/-BloodHound-CB3E4B?&style=for-the-badge&logoColor=white" />
+
+### Network and Vulnerability Assessment
+
+<img src="https://img.shields.io/badge/-Nessus-00C18C?&style=for-the-badge&logoColor=white" />
+<img src="https://img.shields.io/badge/-OpenVAS-558F1B?&style=for-the-badge&logoColor=white" />
+<img src="https://img.shields.io/badge/-Nmap-4682B4?&style=for-the-badge&logoColor=white" />
+<img src="https://img.shields.io/badge/-Wireshark-1679A7?&style=for-the-badge&logo=Wireshark&logoColor=white" />
+
+### Detection and Analysis
+
+<img src="https://img.shields.io/badge/-Splunk-000000?&style=for-the-badge&logo=Splunk&logoColor=white" />
+
+### Development
+
+<img src="https://img.shields.io/badge/-Python-3776AB?&style=for-the-badge&logo=Python&logoColor=white" />
+<img src="https://img.shields.io/badge/-Bash-4EAA25?&style=for-the-badge&logo=GNU%20Bash&logoColor=white" />
+<img src="https://img.shields.io/badge/-Go-00ADD8?&style=for-the-badge&logo=Go&logoColor=white" />
+
+---
+
+## Certifications
+
+### ISC2
+
+<p>
+  <img src="https://img.shields.io/badge/-CISSP-2A4B8D?style=for-the-badge&logo=ISC2&logoColor=white" />
+</p>
+
+### GIAC
+
+<p>
+  <img src="https://img.shields.io/badge/-GPEN-005596?style=for-the-badge" /> <img src="https://img.shields.io/badge/-GDAT-003366?style=for-the-badge" /> <img src="https://img.shields.io/badge/-GCFA-2F4D7D?style=for-the-badge" /> <img src="https://img.shields.io/badge/-GLIR-4A5568?style=for-the-badge" /> <img src="https://img.shields.io/badge/-GNFA-006699?style=for-the-badge" /> <img src="https://img.shields.io/badge/-GCPT-1F5A7A?style=for-the-badge" /> <img src="https://img.shields.io/badge/-GRTP-7A1F1F?style=for-the-badge" />
+</p>
+
+### CompTIA
+
+<p>
+  <img src="https://img.shields.io/badge/-Security%2B-FFB100?style=for-the-badge&logo=CompTIA&logoColor=white" /> <img src="https://img.shields.io/badge/-PenTest%2B-007C92?style=for-the-badge&logo=CompTIA&logoColor=white" />
+</p>
+
+### In Progress
+
+<p>
+  <img src="https://img.shields.io/badge/-OSCP-FFB100?style=for-the-badge&logo=Offensive%20Security&logoColor=black" />
+</p>
+
+---
+
+## Projects
+
+### Security Tools
+
+#### [PortWeft](https://github.com/Henry-Haley/portweft)
+
+PortWeft is a lightweight service-discovery tool that runs Nmap, parses XML results, performs targeted service-aware follow-up checks, and produces clean text or JSON reports.
+
+It also supports optional allowlisted Impacket reconnaissance for SMB and RPC services.
+
+### Technical Write-Ups
+
+#### [Blue: Exploiting MS17-010 in a Windows 7 Lab](https://github.com/Henry-Haley/Henry-Haley/blob/main/Projects/Write-Ups/Blue.md)
+
+A historical training-lab assessment covering SMB enumeration, MS17-010 exploitation, privileged access, persistence, payload transfer, detection opportunities, remediation, cleanup, and retrospective analysis.
+
+---
+
+## Repository Notice
+
+All projects and write-ups on this profile are developed using personally owned systems, authorized training environments, public research, or explicitly authorized security-testing platforms.
