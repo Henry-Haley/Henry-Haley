@@ -113,6 +113,14 @@ PortWeft is a lightweight service-discovery tool that runs Nmap, parses XML resu
 
 It also supports optional allowlisted Impacket reconnaissance for SMB and RPC services.
 
+#### [goGTFO](https://github.com/Henry-Haley/goGTFO)
+
+goGTFO is a Linux host scanner that identifies installed GTFOBins executables and lists documented techniques applicable to the host’s current unprivileged, SUID, capability, and sudo contexts, with MITRE ATT&CK mappings and example commands.
+
+Note: This is not an OPSEC-safe tool.
+Author: Henry Haley
+Based on [goLoL](https://github.com/aaron-kidwell/goLoL) by Aaron Kidwell.
+
 ### Technical Write-Ups
 
 #### [Blue: Exploiting MS17-010 in a Windows 7 Lab](https://github.com/Henry-Haley/Henry-Haley/blob/main/Projects/Write-Ups/Blue.md)
