@@ -78,7 +78,7 @@ I am interested in understanding and documenting the complete security-assessmen
 ### ISC2
 
 <p>
-  <img src="https://img.shields.io/badge/-CISSP-2A4B8D?style=for-the-badge&logo=ISC2&logoColor=white" />
+  <img src="https://img.shields.io/badge/-ISC2 Associate-2A4B8D?style=for-the-badge&logo=ISC2&logoColor=white" />
 </p>
 
 ### GIAC
