@@ -8,6 +8,8 @@ I earned a Bachelor of Science in Cybersecurity Technology from the University o
 
 My primary interests include penetration testing, adversary emulation, vulnerability research, digital forensics, incident response, and security-tool development.
 
+In CTFs and cyber labs, I use the handle **d3adrelay**.
+
 ---
 
 ## Education
